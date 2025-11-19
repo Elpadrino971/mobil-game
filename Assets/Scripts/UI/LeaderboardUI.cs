@@ -67,7 +67,10 @@ namespace PrisonIsland.UI
                 RefreshLeaderboard();
 
                 // Track analytics
-                Core.AnalyticsManager.Instance?.TrackScreen("leaderboard");
+                if (Core.AnalyticsManager.Instance != null)
+                {
+                    Core.AnalyticsManager.Instance.TrackScreen("leaderboard");
+                }
             }
         }
 
@@ -81,17 +84,27 @@ namespace PrisonIsland.UI
         {
             leaderboardTypeDropdown.ClearOptions();
 
-            List<string> options = new List<string>
+            List<string> options = new List<string>();
+
+            if (Core.LocalizationManager.Instance != null)
             {
-                Core.LocalizationManager.Instance?.GetText("leaderboard_total_money") ?? "Total Money",
-                Core.LocalizationManager.Instance?.GetText("leaderboard_population") ?? "Prison Population",
-                Core.LocalizationManager.Instance?.GetText("leaderboard_buildings") ?? "Total Buildings",
-                Core.LocalizationManager.Instance?.GetText("leaderboard_days_survived") ?? "Days Survived",
-                "Security Rating",
-                "Total Prisoners Managed",
-                "Escapes Prevented",
-                "Achievement Points"
-            };
+                options.Add(Core.LocalizationManager.Instance.GetText("leaderboard_total_money"));
+                options.Add(Core.LocalizationManager.Instance.GetText("leaderboard_population"));
+                options.Add(Core.LocalizationManager.Instance.GetText("leaderboard_buildings"));
+                options.Add(Core.LocalizationManager.Instance.GetText("leaderboard_days_survived"));
+            }
+            else
+            {
+                options.Add("Total Money");
+                options.Add("Prison Population");
+                options.Add("Total Buildings");
+                options.Add("Days Survived");
+            }
+
+            options.Add("Security Rating");
+            options.Add("Total Prisoners Managed");
+            options.Add("Escapes Prevented");
+            options.Add("Achievement Points");
 
             leaderboardTypeDropdown.AddOptions(options);
         }
@@ -168,12 +181,22 @@ namespace PrisonIsland.UI
             if (playerRankText != null)
             {
                 string rankText = rank > 0 ? $"#{rank}" : "Unranked";
-                playerRankText.text = $"{Core.LocalizationManager.Instance?.GetText("leaderboard_rank") ?? "Rank"}: {rankText}";
+                string rankLabel = "Rank";
+                if (Core.LocalizationManager.Instance != null)
+                {
+                    rankLabel = Core.LocalizationManager.Instance.GetText("leaderboard_rank");
+                }
+                playerRankText.text = $"{rankLabel}: {rankText}";
             }
 
             if (playerScoreText != null)
             {
-                playerScoreText.text = $"{Core.LocalizationManager.Instance?.GetText("leaderboard_score") ?? "Score"}: {score:N0}";
+                string scoreLabel = "Score";
+                if (Core.LocalizationManager.Instance != null)
+                {
+                    scoreLabel = Core.LocalizationManager.Instance.GetText("leaderboard_score");
+                }
+                playerScoreText.text = $"{scoreLabel}: {score:N0}";
             }
         }
     }

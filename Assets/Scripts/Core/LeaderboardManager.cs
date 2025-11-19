@@ -91,12 +91,15 @@ namespace PrisonIsland.Core
             // SubmitToBackend(type, entry);
 
             // Track analytics
-            AnalyticsManager.Instance?.TrackEvent("leaderboard_score_submitted", new Dictionary<string, object>
+            if (AnalyticsManager.Instance != null)
             {
-                { "leaderboard_type", type.ToString() },
-                { "score", score },
-                { "player_name", playerName }
-            });
+                AnalyticsManager.Instance.TrackEvent("leaderboard_score_submitted", new Dictionary<string, object>
+                {
+                    { "leaderboard_type", type.ToString() },
+                    { "score", score },
+                    { "player_name", playerName }
+                });
+            }
         }
 
         private void SubmitToLocalLeaderboard(LeaderboardType type, LeaderboardEntry entry)
@@ -115,7 +118,10 @@ namespace PrisonIsland.Core
                     existingEntry.timestamp = entry.timestamp;
 
                     OnNewHighScore?.Invoke(entry);
-                    GameEvents.Instance?.OnInfoMessage?.Invoke($"🏆 Nouveau record : {entry.score:N0}!");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnInfoMessage?.Invoke($"🏆 Nouveau record : {entry.score:N0}!");
+                    }
                 }
             }
             else

@@ -87,7 +87,10 @@ namespace PrisonIsland.UI
                 RefreshQuests();
 
                 // Track analytics
-                Core.AnalyticsManager.Instance?.TrackScreen("quests");
+                if (Core.AnalyticsManager.Instance != null)
+                {
+                    Core.AnalyticsManager.Instance.TrackScreen("quests");
+                }
             }
         }
 
@@ -282,10 +285,7 @@ namespace PrisonIsland.UI
             RefreshQuests();
 
             // Show celebration effect
-            if (Core.VFX.VisualEffectsManager.Instance != null)
-            {
-                // Play celebration particle effect
-            }
+            // Can be implemented later with VFX system
 
             // Play sound
             if (Core.AudioManager.Instance != null)

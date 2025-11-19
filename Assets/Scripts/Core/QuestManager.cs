@@ -218,7 +218,10 @@ namespace PrisonIsland.Core
             SaveQuestData();
             OnDailyQuestsRefreshed?.Invoke();
 
-            GameEvents.Instance?.OnInfoMessage?.Invoke("📋 Nouvelles quêtes quotidiennes disponibles!");
+            if (GameEvents.Instance != null)
+            {
+                GameEvents.Instance.OnInfoMessage?.Invoke("📋 Nouvelles quêtes quotidiennes disponibles!");
+            }
         }
 
         #endregion
@@ -294,7 +297,10 @@ namespace PrisonIsland.Core
             SaveQuestData();
             OnWeeklyQuestsRefreshed?.Invoke();
 
-            GameEvents.Instance?.OnInfoMessage?.Invoke("📋 Nouvelles missions hebdomadaires!");
+            if (GameEvents.Instance != null)
+            {
+                GameEvents.Instance.OnInfoMessage?.Invoke("📋 Nouvelles missions hebdomadaires!");
+            }
         }
 
         #endregion
@@ -341,14 +347,20 @@ namespace PrisonIsland.Core
             OnQuestCompleted?.Invoke(quest);
 
             // Track analytics
-            AnalyticsManager.Instance?.TrackEvent("quest_completed", new Dictionary<string, object>
+            if (AnalyticsManager.Instance != null)
             {
-                { "quest_id", quest.id },
-                { "quest_type", quest.questType.ToString() },
-                { "quest_name", quest.questName }
-            });
+                AnalyticsManager.Instance.TrackEvent("quest_completed", new Dictionary<string, object>
+                {
+                    { "quest_id", quest.id },
+                    { "quest_type", quest.questType.ToString() },
+                    { "quest_name", quest.questName }
+                });
+            }
 
-            GameEvents.Instance?.OnInfoMessage?.Invoke($"✅ Quête terminée: {quest.questName}!");
+            if (GameEvents.Instance != null)
+            {
+                GameEvents.Instance.OnInfoMessage?.Invoke($"✅ Quête terminée: {quest.questName}!");
+            }
 
             SaveQuestData();
         }
@@ -360,7 +372,10 @@ namespace PrisonIsland.Core
                 if (rewards.money > 0)
                 {
                     GameManager.Instance.resources.money += rewards.money;
-                    GameEvents.Instance?.OnInfoMessage?.Invoke($"💰 +{rewards.money:F0}$");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnInfoMessage?.Invoke($"💰 +{rewards.money:F0}$");
+                    }
                 }
 
                 if (rewards.food > 0)
@@ -379,9 +394,9 @@ namespace PrisonIsland.Core
                 MonetizationManager.Instance.AddFreeCrystals(rewards.crystals);
             }
 
-            if (!string.IsNullOrEmpty(rewards.specialItem))
+            if (!string.IsNullOrEmpty(rewards.specialItem) && GameEvents.Instance != null)
             {
-                GameEvents.Instance?.OnInfoMessage?.Invoke($"🎁 Objet spécial reçu: {rewards.specialItem}");
+                GameEvents.Instance.OnInfoMessage?.Invoke($"🎁 Objet spécial reçu: {rewards.specialItem}");
             }
         }
 
@@ -396,7 +411,7 @@ namespace PrisonIsland.Core
                 GameEvents.Instance.OnBuildingConstructed += OnBuildingConstructed;
                 GameEvents.Instance.OnPrisonerArrived += OnPrisonerArrived;
                 GameEvents.Instance.OnPrisonerEscaped += OnPrisonerEscaped;
-                GameEvents.Instance.OnNewDayStarted += OnNewDay;
+                GameEvents.Instance.OnNewDay += OnNewDay;
             }
         }
 
@@ -405,7 +420,7 @@ namespace PrisonIsland.Core
             UpdateQuestProgress(QuestTargetType.BuildAny, 1);
 
             // Check specific building types
-            if (building.buildingData.buildingName.Contains("Guard Tower"))
+            if (building.data != null && building.data.buildingName.Contains("Guard Tower"))
             {
                 UpdateQuestProgress(QuestTargetType.BuildSpecific, 1);
             }
@@ -432,7 +447,7 @@ namespace PrisonIsland.Core
             // We track escapes separately
         }
 
-        private void OnNewDay()
+        private void OnNewDay(int day)
         {
             // Track daily survival
             UpdateQuestProgress(QuestTargetType.SurviveDays, 1);
@@ -580,7 +595,7 @@ namespace PrisonIsland.Core
                 GameEvents.Instance.OnBuildingConstructed -= OnBuildingConstructed;
                 GameEvents.Instance.OnPrisonerArrived -= OnPrisonerArrived;
                 GameEvents.Instance.OnPrisonerEscaped -= OnPrisonerEscaped;
-                GameEvents.Instance.OnNewDayStarted -= OnNewDay;
+                GameEvents.Instance.OnNewDay -= OnNewDay;
             }
         }
     }

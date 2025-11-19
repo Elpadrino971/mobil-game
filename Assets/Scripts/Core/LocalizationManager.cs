@@ -413,12 +413,18 @@ namespace PrisonIsland.Core
             OnLanguageChanged?.Invoke(currentLanguage);
 
             // Track analytics
-            AnalyticsManager.Instance?.TrackEvent("language_changed", new Dictionary<string, object>
+            if (AnalyticsManager.Instance != null)
             {
-                { "language", language.ToString() }
-            });
+                AnalyticsManager.Instance.TrackEvent("language_changed", new Dictionary<string, object>
+                {
+                    { "language", language.ToString() }
+                });
+            }
 
-            GameEvents.Instance?.OnInfoMessage?.Invoke($"Language changed to {language}");
+            if (GameEvents.Instance != null)
+            {
+                GameEvents.Instance.OnInfoMessage?.Invoke($"Language changed to {language}");
+            }
         }
 
         /// <summary>
