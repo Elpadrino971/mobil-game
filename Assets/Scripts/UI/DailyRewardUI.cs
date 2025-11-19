@@ -65,7 +65,10 @@ namespace PrisonIsland.UI
 
             if (!Core.DailyRewardManager.Instance.CanClaimToday())
             {
-                Core.GameEvents.Instance?.OnWarning?.Invoke("❌ Déjà réclamé aujourd'hui");
+                if (Core.GameEvents.Instance != null)
+                {
+                    Core.GameEvents.Instance.OnWarning?.Invoke("❌ Déjà réclamé aujourd'hui");
+                }
                 return;
             }
 

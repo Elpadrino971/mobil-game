@@ -245,7 +245,11 @@ namespace PrisonIsland.Core
                 SaveProgress();
 
                 Debug.Log($"🏆 Achievement Unlocked: {achievement.title}");
-                GameEvents.Instance?.OnInfoMessage?.Invoke($"🏆 {achievement.title} débloqué !");
+
+                if (GameEvents.Instance != null)
+                {
+                    GameEvents.Instance.OnInfoMessage?.Invoke($"🏆 {achievement.title} débloqué !");
+                }
             }
         }
 

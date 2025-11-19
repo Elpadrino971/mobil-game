@@ -51,7 +51,10 @@ namespace PrisonIsland.Core
                 type = EventType.Positive,
                 effect = () => {
                     GameManager.Instance.resources.money += 5000;
-                    GameEvents.Instance?.OnInfoMessage?.Invoke("💰 Donation de 5000$ reçue !");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnInfoMessage?.Invoke("💰 Donation de 5000$ reçue !");
+                    }
                 }
             });
 
@@ -62,7 +65,10 @@ namespace PrisonIsland.Core
                 type = EventType.Positive,
                 effect = () => {
                     GameManager.Instance.resources.food += 200;
-                    GameEvents.Instance?.OnInfoMessage?.Invoke("🍞 +200 nourriture reçue !");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnInfoMessage?.Invoke("🍞 +200 nourriture reçue !");
+                    }
                 }
             });
 
@@ -73,7 +79,10 @@ namespace PrisonIsland.Core
                 type = EventType.Positive,
                 effect = () => {
                     GameManager.Instance.resources.reputation += 15;
-                    GameEvents.Instance?.OnInfoMessage?.Invoke("⭐ Inspection réussie ! +15 réputation");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnInfoMessage?.Invoke("⭐ Inspection réussie ! +15 réputation");
+                    }
                 }
             });
 
@@ -89,7 +98,10 @@ namespace PrisonIsland.Core
                         prisoner.stats.morale = Mathf.Max(0, prisoner.stats.morale - 30);
                     }
                     GameManager.Instance.resources.reputation -= 10;
-                    GameEvents.Instance?.OnCriticalAlert?.Invoke("🚨 ÉMEUTE ! Moral des détenus -30");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnCriticalAlert?.Invoke("🚨 ÉMEUTE ! Moral des détenus -30");
+                    }
                 }
             });
 
@@ -100,7 +112,10 @@ namespace PrisonIsland.Core
                 type = EventType.Negative,
                 effect = () => {
                     GameManager.Instance.resources.security = Mathf.Max(0, GameManager.Instance.resources.security - 20);
-                    GameEvents.Instance?.OnWarning?.Invoke("⚠️ Panne électrique ! Sécurité -20");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnWarning?.Invoke("⚠️ Panne électrique ! Sécurité -20");
+                    }
                 }
             });
 
@@ -111,7 +126,10 @@ namespace PrisonIsland.Core
                 type = EventType.Negative,
                 effect = () => {
                     GameManager.Instance.resources.food = Mathf.Max(0, GameManager.Instance.resources.food - 100);
-                    GameEvents.Instance?.OnWarning?.Invoke("⚠️ Nourriture contaminée ! -100 nourriture");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnWarning?.Invoke("⚠️ Nourriture contaminée ! -100 nourriture");
+                    }
                 }
             });
 
@@ -126,12 +144,18 @@ namespace PrisonIsland.Core
                     if (rep > 70)
                     {
                         GameManager.Instance.resources.reputation += 10;
-                        GameEvents.Instance?.OnInfoMessage?.Invoke("📰 Article positif ! +10 réputation");
+                        if (GameEvents.Instance != null)
+                        {
+                            GameEvents.Instance.OnInfoMessage?.Invoke("📰 Article positif ! +10 réputation");
+                        }
                     }
                     else if (rep < 40)
                     {
                         GameManager.Instance.resources.reputation -= 10;
-                        GameEvents.Instance?.OnWarning?.Invoke("📰 Article négatif ! -10 réputation");
+                        if (GameEvents.Instance != null)
+                        {
+                            GameEvents.Instance.OnWarning?.Invoke("📰 Article négatif ! -10 réputation");
+                        }
                     }
                 }
             });
@@ -143,7 +167,10 @@ namespace PrisonIsland.Core
                 type = EventType.Neutral,
                 effect = () => {
                     GameManager.Instance.resources.money -= 2000;
-                    GameEvents.Instance?.OnWarning?.Invoke("📋 Nouvelles réglementations : -2000$");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnWarning?.Invoke("📋 Nouvelles réglementations : -2000$");
+                    }
                 }
             });
 
@@ -157,7 +184,10 @@ namespace PrisonIsland.Core
                 effect = () => {
                     GameManager.Instance.resources.money += 20000;
                     GameManager.Instance.resources.materials += 500;
-                    GameEvents.Instance?.OnInfoMessage?.Invoke("🎉 Subvention ! +20000$ et +500 matériaux");
+                    if (GameEvents.Instance != null)
+                    {
+                        GameEvents.Instance.OnInfoMessage?.Invoke("🎉 Subvention ! +20000$ et +500 matériaux");
+                    }
                 }
             });
 
@@ -190,11 +220,17 @@ namespace PrisonIsland.Core
                     {
                         GameManager.Instance.totalEscapes += escapees;
                         GameManager.Instance.resources.reputation -= escapees * 10;
-                        GameEvents.Instance?.OnCriticalAlert?.Invoke($"🚨 ALERTE ! {escapees} détenus se sont échappés !");
+                        if (GameEvents.Instance != null)
+                        {
+                            GameEvents.Instance.OnCriticalAlert?.Invoke($"🚨 ALERTE ! {escapees} détenus se sont échappés !");
+                        }
                     }
                     else
                     {
-                        GameEvents.Instance?.OnInfoMessage?.Invoke("🛡️ Tentative d'évasion massive déjouée !");
+                        if (GameEvents.Instance != null)
+                        {
+                            GameEvents.Instance.OnInfoMessage?.Invoke("🛡️ Tentative d'évasion massive déjouée !");
+                        }
                     }
                 }
             });

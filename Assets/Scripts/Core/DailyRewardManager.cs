@@ -184,7 +184,10 @@ namespace PrisonIsland.Core
         {
             if (hasClaimedToday)
             {
-                GameEvents.Instance?.OnWarning?.Invoke("❌ Récompense déjà réclamée aujourd'hui");
+                if (GameEvents.Instance != null)
+                {
+                    GameEvents.Instance.OnWarning?.Invoke("❌ Récompense déjà réclamée aujourd'hui");
+                }
                 return;
             }
 
@@ -248,7 +251,10 @@ namespace PrisonIsland.Core
             if (reward.materials > 0) message += $"🧱 +{reward.materials} ";
             if (reward.crystals > 0) message += $"💎 +{reward.crystals} cristaux ";
 
-            GameEvents.Instance?.OnInfoMessage?.Invoke(message);
+            if (GameEvents.Instance != null)
+            {
+                GameEvents.Instance.OnInfoMessage?.Invoke(message);
+            }
         }
 
         private void ShowDailyRewardPopup()
@@ -259,7 +265,10 @@ namespace PrisonIsland.Core
             Debug.Log($"Daily reward available! Current streak: {currentStreak}, Next reward: Day {nextRewardDay}");
 
             // Notify UI to show popup
-            GameEvents.Instance?.OnInfoMessage?.Invoke("🎁 Récompense quotidienne disponible !");
+            if (GameEvents.Instance != null)
+            {
+                GameEvents.Instance.OnInfoMessage?.Invoke("🎁 Récompense quotidienne disponible !");
+            }
         }
 
         public bool CanClaimToday()
